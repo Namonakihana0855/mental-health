@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>こころの回復サポート Ver.2</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Noto Sans JP",
+    sans-serif;
+  background: #f4f7fb;
+  color: #263238;
+}
+
+.container {
+  max-width: 680px;
+  margin: auto;
+  padding: 20px;
+}
+
+.card {
+  background: white;
+  border-radius: 18px;
+  padding: 22px;
+  margin-bottom: 18px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+}
+
+h1 {
+  font-size: 27px;
+  margin-bottom: 8px;
+}
+
+h2 {
+  font-size: 20px;
+  margin-top: 0;
+}
+
+.description {
+  line-height: 1.8;
+}
+
+.notice {
+  background: #fff8e1;
+  border-radius: 12px;
+  padding: 15px;
+  line-height: 1.7;
+  font-size: 14px;
+}
+
+.question {
+  margin: 24px 0;
+}
+
+.question-title {
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.range-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+input[type="range"] {
+  width: 100%;
+  accent-color: #4556b3;
+}
+
+.value {
+  min-width: 42px;
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  color: #4556b3;
+}
+
+button {
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  padding: 15px;
+  margin-top: 10px;
+  font-size: 17px;
+  font-weight: bold;
+  background: #4556b3;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+.secondary {
+  background: #78909c;
+}
+
+.danger {
+  background: #c62828;
+}
+
+.result {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+.score {
+  text-align: center;
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.message {
+  background: #eef3ff;
+  padding: 16px;
+  border-radius: 12px;
+  line-height: 1.8;
+}
+
+.menu {
+  display: grid;
+  gap: 10px;
+}
+
+.menu-item {
+  background: #f7f9fc;
+  border-radius: 12px;
+  padding: 14px;
+  line-height: 1.6;
+}
+
+.history-item {
+  border-left: 4px solid #4556b3;
+  background: #f7f9fc;
+  padding: 12px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  line-height: 1.6;
+}
+
+.small {
+  font-size: 13px;
+  color: #607d8b;
+}
+
+footer {
+  text-align: center;
+  font-size: 12px;
+  color: #78909c;
+  padding: 20px 0;
+  line-height: 1.7;
+}
+
+.hidden {
+  display: none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="card">
+    <h1>🌿 こころの回復サポート</h1>
+
+    <p class="description">
+      今日のこころと身体の状態を簡単に記録して、
+      自分のペースで回復への小さな一歩を考えるための
+      セルフケアアプリです。
+    </p>
+
+    <div class="notice">
+      ⚠️ このアプリは医療機関による診断・治療を行うものではありません。
+      結果はあくまで自分の状態を振り返るための目安です。
+      強い症状や緊急性を感じる場合は、医療機関や相談窓口に相談してください。
+    </div>
+  </div>
+
+
+  <div class="card">
+
+    <h2>📝 今日の状態</h2>
+
+    <div class="question">
+      <div class="question-title">
+        😊 気分はどのくらい良いですか？
+      </div>
+
+      <div class="range-row">
+        <input
+          type="range"
+          min="0"
+          max="10"
+          value="5"
+          id="mood"
+          oninput="updateValue('mood')"
+        >
+        <div class="value" id="moodValue">5</div>
+      </div>
+    </div>
+
+
+    <div class="question">
+      <div class="question-title">
+        😴 睡眠はどのくらい取れましたか？
+      </div>
+
+      <div class="range-row">
+        <input
+          type="range"
+          min="0"
+          max="10"
+          value="5"
+          id="sleep"
+          oninput="updateValue('sleep')"
+        >
+        <div class="value" id="sleepValue">5</div>
+      </div>
+    </div>
+
+
+    <div class="question">
+      <div class="question-title">
+        🔋 疲労はどのくらい少ないですか？
+      </div>
+
+      <div class="range-row">
+        <input
+          type="range"
+          min="0"
+          max="10"
+          value="5"
+          id="fatigue"
+          oninput="updateValue('fatigue')"
+        >
+        <div class="value" id="fatigueValue">5</div>
+      </div>
+    </div>
+
+
+    <div class="question">
+      <div class="question-title">
+        🔥 意欲はどのくらいありますか？
+      </div>
+
+      <div class="range-row">
+        <input
+          type="range"
+          min="0"
+          max="10"
+          value="5"
+          id="motivation"
+          oninput="updateValue('motivation')"
+        >
+        <div class="value" id="motivationValue">5</div>
+      </div>
+    </div>
+
+
+    <div class="question">
+      <div class="question-title">
+        😰 不安はどのくらい少ないですか？
+      </div>
+
+      <div class="range-row">
+        <input
+          type="range"
+          min="0"
+          max="10"
+          value="5"
+          id="anxiety"
+          oninput="updateValue('anxiety')"
+        >
+        <div class="value" id="anxietyValue">5</div>
+      </div>
+    </div>
+
+    <button onclick="checkCondition()">
+      今日の状態を確認する
+    </button>
+
+  </div>
+
+
+  <div class="card hidden" id="resultCard">
+
+    <h2>🌱 今日の状態</h2>
+
+    <div class="result" id="resultTitle"></div>
+
+    <div class="score" id="scoreText"></div>
+
+    <div class="message" id="resultMessage"></div>
+
+  </div>
+
+
+  <div class="card hidden" id="menuCard">
+
+    <h2>🧘 今日の回復メニュー</h2>
+
+    <div class="menu">
+
+      <div class="menu-item">
+        💧 <strong>水分を取る</strong><br>
+        コップ1杯の水をゆっくり飲んでみましょう。
+      </div>
+
+      <div class="menu-item">
+        🌬️ <strong>深呼吸する</strong><br>
+        肩の力を抜いて、ゆっくり呼吸してみましょう。
+      </div>
+
+      <div class="menu-item">
+        🚶 <strong>少しだけ身体を動かす</strong><br>
+        体調が良ければ、数分だけ歩いてみましょう。
+      </div>
+
+      <div class="menu-item">
+        🛏️ <strong>休む</strong><br>
+        疲労が強い日は、休むことも大切な行動です。
+      </div>
+
+      <div class="menu-item">
+        ✍️ <strong>今日できたことを1つ書く</strong><br>
+        小さなことでも「できた」と記録してみましょう。
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>📊 過去7日間の記録</h2>
+
+    <div id="history"></div>
+
+    <button
+      class="secondary"
+      onclick="showHistory()">
+      記録を更新
+    </button>
+
+    <button
+      class="danger"
+      onclick="clearHistory()">
+      記録を削除
+    </button>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>🆘 つらいときは</h2>
+
+    <p class="description">
+      強い不安、希死念慮、自分を傷つけたい気持ちなどがある場合は、
+      一人で抱え込まず、医療機関や身近な人、地域の相談窓口などに
+      相談してください。
+    </p>
+
+    <div class="notice">
+      緊急の場合は、地域の救急サービスなど、
+      その場で利用できる緊急支援につながってください。
+    </div>
+
+  </div>
+
+
+  <footer>
+    こころの回復サポート Ver.2<br>
+    セルフケア・状態記録を目的とした試作アプリ
+  </footer>
+
+</div>
+
+
+<script>
+
+function updateValue(id) {
+
+  const slider = document.getElementById(id);
+  const value = document.getElementById(id + "Value");
+
+  value.textContent = slider.value;
+}
+
+
+function getValue(id) {
+
+  return Number(
+    document.getElementById(id).value
+  );
+
+}
+
+
+function checkCondition() {
+
+  const mood = getValue("mood");
+  const sleep = getValue("sleep");
+  const fatigue = getValue("fatigue");
+  const motivation = getValue("motivation");
+  const anxiety = getValue("anxiety");
+
+  const total =
+    mood +
+    sleep +
+    fatigue +
+    motivation +
+    anxiety;
+
+  const average = total / 5;
+
+  let title = "";
+  let message = "";
+
+  if (average >= 7) {
+
+    title = "🌿 比較的安定しています";
+
+    message =
+      "今日は比較的余裕がありそうです。" +
+      "無理に予定を増やしすぎず、" +
+      "今できていることを大切にしましょう。";
+
+  } else if (average >= 4) {
+
+    title = "🌱 少し休みながら進みましょう";
+
+    message =
+      "今日は無理をしすぎないことが大切です。" +
+      "できることを一つずつ選び、" +
+      "疲れたら休みましょう。";
+
+  } else {
+
+    title = "🛏️ 今日は回復を優先しましょう";
+
+    message =
+      "今はエネルギーが低下している可能性があります。" +
+      "頑張って活動量を増やすより、" +
+      "休息や安心できる環境を優先してみましょう。";
+
+  }
+
+
+  document.getElementById("resultTitle").textContent =
+    title;
+
+  document.getElementById("scoreText").textContent =
+    "今日のセルフチェック： " +
+    average.toFixed(1) +
+    " / 10";
+
+  document.getElementById("resultMessage").textContent =
+    message;
+
+
+  document.getElementById("resultCard")
+    .classList.remove("hidden");
+
+  document.getElementById("menuCard")
+    .classList.remove("hidden");
+
+
+  saveRecord(
+    mood,
+    sleep,
+    fatigue,
+    motivation,
+    anxiety,
+    average
+  );
+
+  showHistory();
+
+}
+
+
+function saveRecord(
+  mood,
+  sleep,
+  fatigue,
+  motivation,
+  anxiety,
+  average
+) {
+
+  const today =
+    new Date().toLocaleDateString("ja-JP");
+
+  const record = {
+
+    date: today,
+
+    mood: mood,
+
+    sleep: sleep,
+
+    fatigue: fatigue,
+
+    motivation: motivation,
+
+    anxiety: anxiety,
+
+    average:
+      Number(average.toFixed(1))
+
+  };
+
+
+  let history =
+    JSON.parse(
+      localStorage.getItem("mentalHealthHistory")
+    ) || [];
+
+
+  history = history.filter(
+    item => item.date !== today
+  );
+
+
+  history.unshift(record);
+
+
+  history =
+    history.slice(0, 7);
+
+
+  localStorage.setItem(
+    "mentalHealthHistory",
+    JSON.stringify(history)
+  );
+
+}
+
+
+function showHistory() {
+
+  const historyElement =
+    document.getElementById("history");
+
+
+  let history =
+    JSON.parse(
+      localStorage.getItem("mentalHealthHistory")
+    ) || [];
+
+
+  if (history.length === 0) {
+
+    historyElement.innerHTML =
+      '<p class="small">まだ記録がありません。</p>';
+
+    return;
+
+  }
+
+
+  historyElement.innerHTML = "";
+
+
+  history.forEach(record => {
+
+    const item =
+      document.createElement("div");
+
+    item.className =
+      "history-item";
+
+
+    item.innerHTML =
+
+      "<strong>" +
+      record.date +
+      "</strong><br>" +
+
+      "総合：" +
+      record.average +
+      " / 10<br>" +
+
+      "気分：" +
+      record.mood +
+      "　睡眠：" +
+      record.sleep +
+      "<br>" +
+
+      "疲労：" +
+      record.fatigue +
+      "　意欲：" +
+      record.motivation +
+      "<br>" +
+
+      "不安：" +
+      record.anxiety;
+
+
+    historyElement.appendChild(item);
+
+  });
+
+}
+
+
+function clearHistory() {
+
+  const answer =
+    confirm(
+      "保存されている記録をすべて削除しますか？"
+    );
+
+
+  if (!answer) {
+
+    return;
+
+  }
+
+
+  localStorage.removeItem(
+    "mentalHealthHistory"
+  );
+
+
+  showHistory();
+
+}
+
+
+showHistory();
+
+</script>
+
+</body>
+</html>
